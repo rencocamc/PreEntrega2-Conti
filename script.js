@@ -48,6 +48,7 @@ while (!fin) {
             switch (tipoId) {
                 case 1:
                     let alcoholId = pedirYValidarInt(1,4,`Ingrese el número de la bebida alcoholica que desea agregar:\n1-Fernet $${precioFernet}\n2-Ron $${precioRon}\n3-Gin $${precioGin}\n4-Volver atrás\n`);
+                    if(alcoholId == 4) break;
                     cant = pedirYValidarInt(1,99,"Ingrese la cantidad:\n")
                     switch (alcoholId) {
                         case 1:
@@ -62,14 +63,13 @@ while (!fin) {
                             carrito = carrito+`${cant} Gin $${precioGin*cant}\n`;
                             valorTotal = suma(valorTotal,precioGin*cant);
                             break;
-                        case 4:
-                            break;
                         default:
                             break;
                     }
                     break;
                 case 2:
-                    let dulceId = pedirYValidarInt(1,4,`Ingrese el número de la bebida dulce que desea agregar:\n1-Coca $${precioCoca}\n2-Pomelo $${precioPomelo}\n3-Tónica $${precioTonica}\n4-Volver atrás\n`);
+                    let dulceId = pedirYValidarInt(1,4,`Ingrese el número de la bebida dulce que desea agregar:\n1-Coca $${precioCoca}\n2-Pomelo $${precioPomelo}\n3-Tónica $${precioTonica}\n4-Volver atrás\n`)
+                    if(dulceId == 4) break;
                     cant = pedirYValidarInt(1,99,"Ingrese la cantidad:\n")
                     switch (dulceId) {
                         case 1:
@@ -83,8 +83,6 @@ while (!fin) {
                         case 3:
                             carrito = carrito+`${cant} Tónica $${precioTonica*cant}\n`;
                             valorTotal = suma(valorTotal,precioTonica*cant);
-                            break;
-                        case 4:
                             break;
                         default:
                             break;
