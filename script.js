@@ -2,13 +2,23 @@ let fin = false;
 let carrito = "";
 let valorTotal = 0;
 
-let precioFernet = 560;
-let precioRon = 450;
-let precioGin = 690;
+class Bebida {
+    constructor (nombre, marca, precio){
+        this.nombre=nombre;
+        this.marca=marca;
+        this.precio=precio;
+    }
+}
 
-let precioCoca = 120;
-let precioPomelo = 130;
-let precioTonica = 160;
+let Fernet = new Bebida("Fernet", "Branca", 560);
+let Ron = new Bebida("Ron", "Captain Morgan", 450);
+let Gin = new Bebida("Gin", "Taqueray", 690);
+
+let Coca = new Bebida("Coca", "Coca cola", 120);
+let Pomelo = new Bebida("Pomelo", "Schweppes", 130);;
+let Tonica = new Bebida("Tónica", "Schweppes", 160);
+
+
 
 const suma = (a,b) => a+b;
 
