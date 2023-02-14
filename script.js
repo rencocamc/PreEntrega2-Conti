@@ -1,6 +1,4 @@
-let fin = false;
-let carrito = "";
-let valorTotal = 0;
+const suma = (a,b) => a+b;
 
 class Bebida {
     constructor (nombre, marca, precio){
@@ -8,19 +6,56 @@ class Bebida {
         this.marca=marca;
         this.precio=precio;
     }
+
+    toString(){
+        return this.nombre+" "+this.marca+" $"+this.precio;
+    }
 }
 
-let Fernet = new Bebida("Fernet", "Branca", 560);
-let Ron = new Bebida("Ron", "Captain Morgan", 450);
-let Gin = new Bebida("Gin", "Taqueray", 690);
+class ItemCarrito {
+    constructor(bebida, cant){
+        this.bebida=bebida;
+        this.cant=cant; 
+    }
 
-let Coca = new Bebida("Coca", "Coca cola", 120);
-let Pomelo = new Bebida("Pomelo", "Schweppes", 130);;
-let Tonica = new Bebida("Tónica", "Schweppes", 160);
+    toString(){
+        return this.cant+" - "+this.bebida.toString();
+    }
+}
 
+class Carrito {
+    constructor(){
+        this.total = 0;
+        this.arrayCarrito = [];
+    }
 
+    agregarItem(bebida, cant){
+        if(this.arrayCarrito == [] || !this.arrayCarrito.some((item)=> item.bebida == bebida)){
+            this.arrayCarrito.push(new ItemCarrito(bebida, cant));
+        }else{
+            let aux = this.arrayCarrito.find((item)=> item.bebida == bebida)
+            aux.cant = suma(aux.cant, cant);
+        }
+        this.total = suma(this.total,(bebida.precio)*cant);
+    }
+    
+    toString(){
+        let aux = "";
+        for (let i = 0; i < this.arrayCarrito.length; i++) {
+            aux = aux + this.arrayCarrito[i].toString()+"\n";
+            
+        }
+        return aux +"\nValor total: "+this.total;
+    }
+}
 
-const suma = (a,b) => a+b;
+let fernet = new Bebida("Fernet", "Branca", 560);
+let ron = new Bebida("Ron", "Captain Morgan", 450);
+let gin = new Bebida("Gin", "Taqueray", 690);
+
+let coca = new Bebida("Cola", "Coca cola", 120);
+let pomelo = new Bebida("Pomelo", "Schweppes", 130);
+let tonica = new Bebida("Tónica", "Schweppes", 160);
 
 function pedirYValidarInt(menor, mayor, descripcion) {
     let dato; 
@@ -47,6 +82,9 @@ function pedirYValidarString(descripcion) {
 alert("Bienvenido al Almacén de Bebidas!\nPresione aceptar para iniciar su pedido.");
 
 //Loop principal
+let fin = false;
+let carrito = new Carrito();
+
 while (!fin) {
     let opMenu = pedirYValidarInt(1,4,"Ingrese el número para acceder a la opción que desea del menú:\n1-Bebidas\n2-Ver carrito\n3-Vaciar carrito\n4-Finalizar compra\n");
     //Menú principal
@@ -57,42 +95,36 @@ while (!fin) {
             //Tipos de bebidas
             switch (tipoId) {
                 case 1:
-                    let alcoholId = pedirYValidarInt(1,4,`Ingrese el número de la bebida alcoholica que desea agregar:\n1-Fernet $${precioFernet}\n2-Ron $${precioRon}\n3-Gin $${precioGin}\n4-Volver atrás\n`);
+                    let alcoholId = pedirYValidarInt(1,4,`Ingrese el número de la bebida alcoholica que desea agregar:\n1-${fernet.toString()}\n2-${ron.toString()}\n3-${gin.toString()}\n4-Volver atrás\n`);
                     if(alcoholId == 4) break;
                     cant = pedirYValidarInt(1,99,"Ingrese la cantidad:\n")
                     switch (alcoholId) {
                         case 1:
-                            carrito = carrito+`${cant} Fernet $${precioFernet*cant}\n`;
-                            valorTotal = suma(valorTotal,precioFernet*cant);
+                            carrito.agregarItem(fernet,cant);
                             break;
                         case 2:
-                            carrito = carrito+`${cant} Ron $${precioRon*cant}\n`;
-                            valorTotal = suma(valorTotal,precioRon*cant);
+                            carrito.agregarItem(ron,cant);
                             break;
                         case 3:
-                            carrito = carrito+`${cant} Gin $${precioGin*cant}\n`;
-                            valorTotal = suma(valorTotal,precioGin*cant);
+                            carrito.agregarItem(gin,cant);
                             break;
                         default:
                             break;
                     }
                     break;
                 case 2:
-                    let dulceId = pedirYValidarInt(1,4,`Ingrese el número de la bebida dulce que desea agregar:\n1-Coca $${precioCoca}\n2-Pomelo $${precioPomelo}\n3-Tónica $${precioTonica}\n4-Volver atrás\n`)
+                    let dulceId = pedirYValidarInt(1,4,`Ingrese el número de la bebida dulce que desea agregar:\n1-${coca.toString()}\n2-${pomelo.toString()}\n3-${tonica.toString()}\n4-Volver atrás\n`)
                     if(dulceId == 4) break;
                     cant = pedirYValidarInt(1,99,"Ingrese la cantidad:\n")
                     switch (dulceId) {
                         case 1:
-                            carrito = carrito+`${cant} Coca $${precioCoca*cant}\n`;
-                            valorTotal = suma(valorTotal,precioCoca*cant);;
+                            carrito.agregarItem(coca,cant);
                             break;
                         case 2:
-                            carrito = carrito+`${cant} Pomelo $${precioPomelo*cant}\n`;
-                            valorTotal = suma(valorTotal,precioPomelo*cant);
+                            carrito.agregarItem(pomelo,cant);
                             break;
                         case 3:
-                            carrito = carrito+`${cant} Tónica $${precioTonica*cant}\n`;
-                            valorTotal = suma(valorTotal,precioTonica*cant);
+                            carrito.agregarItem(tonica,cant);
                             break;
                         default:
                             break;
@@ -105,33 +137,31 @@ while (!fin) {
             }
             break;
         case 2:
-            if (carrito == "") {
+            if (carrito.total == 0) {
                 alert("Su carrito está vacio")
             } else {
-                alert(`Su carrito contiene:\n${carrito}\nTotal: $${valorTotal}`)
+                alert(`Su carrito contiene:\n${carrito.toString()}`)
             }
             break;
         case 3:
-            if (carrito == "") {
+            if (carrito.total == 0) {
                 alert("Su carrito está vacio")
             } else {
                 if (pedirYValidarInt(1,2,"Está seguro/a que desea vaciar el carrito?\n1-Si\n2-No\n") == 1) {
-                    carrito = "";
-                    valorTotal = 0;
+                    carrito.arrayCarrito = [];
+                    carrito.total = 0;
                     alert(`Su carrito fue vaciado`)
                 }
             }
             break;
         case 4:
-            if (valorTotal != 0) {
+            if (carrito.total != 0) {
                 let nombre = pedirYValidarString("Ingrese su nombre.\n");
                 let direccion = pedirYValidarString("Ingrese su dirección.\n");
-                alert(`${nombre}, tu pedido fue realizado con éxito!\nEl valor total es de $${valorTotal}, y te lo enviaremos a ${direccion}.\nGracias por comprar en el Almacén de Bebidas!`)
-                fin = true;
-            }else{
-                alert(`Gracias por visitar el Almacén de Bebidas!`)
-                fin = true;
+                alert(`${nombre}, tu pedido fue realizado con éxito!\nEl valor total es de $${carrito.total}, y te lo enviaremos a ${direccion}.\n`)
             }
+            alert(`Gracias por visitar el Almacén de Bebidas!`)
+            fin = true;
             break;
         default:
             break;
