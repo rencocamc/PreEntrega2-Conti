@@ -45,7 +45,7 @@ class Carrito {
             aux = aux + this.arrayCarrito[i].toString()+"\n";
             
         }
-        return aux +"\nValor total: "+this.total;
+        return aux +"\nValor total: $"+this.total;
     }
 }
 
